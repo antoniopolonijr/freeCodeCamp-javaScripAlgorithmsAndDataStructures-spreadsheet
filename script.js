@@ -33,16 +33,17 @@ window.onload = () => {
     label.className = "label"; // Set the className of the label element to label
     label.textContent = name; // set the textContent to the name parameter.
     container.appendChild(label); // .appendChild() method to add your label element to the container element.
-    const letters = charRange("A", "J");
-    letters.forEach(createLabel); // You should see some letters appear across the top of your spreadsheet.
-    range(1, 99).forEach((number) => {
-      createLabel(number); // Remember that range() returns an array, so you can chain array methods directly to the function call. // You should see some numbers appear in your spreadsheet.
-      letters.forEach((letter) => {
-        const input = document.createElement("input");
-        input.type = "text";
-        input.id = letter + number;
-        input.ariaLabel = letter + number;
-        /*
+  };
+  const letters = charRange("A", "J");
+  letters.forEach(createLabel); // You should see some letters appear across the top of your spreadsheet.
+  range(1, 99).forEach((number) => {
+    createLabel(number); // Remember that range() returns an array, so you can chain array methods directly to the function call. // You should see some numbers appear in your spreadsheet.
+    letters.forEach((letter) => {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.id = letter + number;
+      input.ariaLabel = letter + number;
+      /*
         In earlier projects you learned about the setAttribute method. Another way to update an attribute in JavaScript is to use the following syntax:
         Example Code
         el.attribute = value;
@@ -50,8 +51,7 @@ window.onload = () => {
         Example Code
         el.ariaLabel = "Aria Label Value";
         */
-        container.appendChild(input); // You should now be able to see the cells of your spreadsheet.
-      });
+      container.appendChild(input); // You should now be able to see the cells of your spreadsheet.
     });
-  };
+  });
 };
