@@ -63,9 +63,25 @@ const user = {
 console.log(user); // { userId: 1, firstName: 'John', loggedIn: true }
 */
 const spreadsheetFunctions = {
+  "": (nums) => nums, // Finally, to handle potential edge cases, add an empty string property (you will need to use quotes) which is a function that takes a single argument and returns that argument.
   sum,
   average,
   median,
+  even: (nums) => nums.filter(isEven), // Add an even property to your spreadsheetFunctions. It should take a nums parameter, and return the result of filtering the nums array to only include even numbers. Use a reference to your isEven function to help.
+  someeven: (nums) => nums.some(isEven), // to check if any element in the array is even.
+  // Arrays have an .every() method. Like the .some() method, .every() accepts a callback function which should take an element of the array as the argument. The .every() method will return true if the callback function returns true for all elements in the array.
+  // Here is an example of a .every() method call to check if all elements in the array are uppercase letters.
+  // Example Code
+  // const arr = ["A", "b", "C"];
+  // arr.every(letter => letter === letter.toUpperCase());
+  everyeven: (nums) => nums.every(isEven), // to check whether all array elements are even
+  firsttwo: (nums) => nums.slice(0, 2), // returns the first two elements of the nums array.
+  lasttwo: (nums) => nums.slice(-2), // returns the last two elements of the nums array
+  has2: (nums) => nums.includes(2), // returns whether the nums array has 2 in the values
+  increment: (nums) => nums.map((num) => num + 1), // returns nums with every value incremented by one.
+  random: ([x, y]) => Math.floor(Math.random() * y + x), // Create a random property. This property should use the first two numbers from an array to generate a random whole number. The range for this number starts at the smaller positive number (inclusive) among the first two numbers and ends just before the sum of these two numbers. Use the Math.floor() and Math.random() methods for the calculation.
+  range: (nums) => range(...nums), // Add a range property which generates a range from the first number in nums to the second number in nums. Remember that you have a range function you can reuse here.
+  // Add a nodupes property which returns nums with all duplicate values removed. For example, [2, 1, 2, 5, 3, 2, 7] should return [2, 1, 5, 3, 7].
 };
 
 // Now you can start applying your function parsing logic to a string.
