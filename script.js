@@ -68,6 +68,23 @@ const spreadsheetFunctions = {
   median,
 };
 
+// Now you can start applying your function parsing logic to a string.
+const applyFunction = (str) => {
+  const noHigh = highPrecedence(str); // First you need to handle the higher precedence operators
+  const infix = /([\d.]+)([+-])([\d.]+)/; // Now that you've parsed and evaluated the multiplication and division operators, you need to do the same with the addition and subtraction operators.
+  const str2 = infixEval(noHigh, infix);
+  const functionCall = /([a-z0-9]*)\(([0-9., ]*)\)(?!.*\()/i; // This expression will look for function calls like sum(1, 4).
+  const toNumberList = (args) => args.split(",").map(parseFloat);
+  const apply = (fn, args) =>
+    spreadsheetFunctions[fn.toLowerCase()](toNumberList(args)); // The fn parameter will be the name of a function, such as SUM. Remember that fn might not be lowercase, so you'll need to convert it to a lowercase string.
+  // Your apply function is returning the spreadsheet function, but not actually applying it. Update apply to call the function. Pass in the result of calling toNumberList with args as an argument.
+  return str2.replace(functionCall, (match, fn, args) =>
+    spreadsheetFunctions.hasOwnProperty(fn.toLowerCase())
+      ? apply(fn, args)
+      : match
+  ); // Now your applyFunction needs to return a result
+};
+
 // function to generate a range of numbers.
 const range = (start, end) =>
   Array(end - start + 1)
@@ -155,6 +172,10 @@ The .map() method here will call the myFunc function, passing the same arguments
     idToText(match.toUpperCase())
   ); // Declare a cellExpanded variable and assign it the value of calling .replace() on your rangeExpanded variable. Pass it your cellRegex and an empty callback function. The callback function should take a match parameter.
   // Update your callback function to return the result of calling idToText() with match as the argument. Remember that your regular expression is case-insensitive, so you will need to call toUpperCase() on match before passing it to idToText().
+  const functionExpanded = applyFunction(cellExpanded); // Now you can start applying your function parser to your evalFormula logic.
+  return functionExpanded === x // Like you did with your highPrecedence() function, your evalFormula() function needs to ensure it has evaluated and replaced everything.
+    ? functionExpanded
+    : evalFormula(functionExpanded, cells);
 };
 
 // function to programmatically generate the cells for the spreadsheet.
@@ -204,5 +225,12 @@ const update = (event) => {
   if (!value.includes(element.id) && value.startsWith("=")) {
     // to check if the value does not include the id of the element.
     // Spreadsheet software typically uses = at the beginning of a cell to indicate a calculation should be used, and spreadsheet functions should be evaluated. Check if the first character of value is =
+    element.value = evalFormula(
+      value.slice(1),
+      Array.from(document.getElementById("container").children)
+    ); // Now your update() function can actually evaluate formulas. Remember that you wrote the if condition to check that a function was called.
+    // The first argument for your evalFormula call needs to be the contents of the cell (which you stored in value). However, the contents start with an = character to trigger the function, so you need to pass the substring of value starting at index 1.
+    // You can quickly get all cells from your page by getting the #container element by its id and accessing the children property of the result. Pass that to your evalFormula() call as the second parameter.
+    // Unfortunately, that children property is returning a collection of elements, which is array-like but not an array. Wrap your second argument in Array.from() to convert it to an array.
   }
 };
